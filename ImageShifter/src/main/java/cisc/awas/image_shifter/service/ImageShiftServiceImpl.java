@@ -1,6 +1,7 @@
 package cisc.awas.image_shifter.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -63,7 +64,7 @@ public class ImageShiftServiceImpl implements ImageShiftService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			handleException(image.getId());
-		} catch (Exception e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 			handleException(image.getId());
 		}

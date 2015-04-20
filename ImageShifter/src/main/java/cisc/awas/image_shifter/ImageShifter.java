@@ -15,6 +15,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.env.Environment;
 
 import cisc.awas.image_shifter.service.ImageShiftService;
@@ -22,6 +23,7 @@ import cisc.awas.image_shifter.service.ImageShiftService;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan(basePackages = "cisc.awas.image_shifter")
+@ImportResource(value = {"classpath:applicationContext.xml"})
 public class ImageShifter {
 	
 	@Autowired
@@ -31,6 +33,8 @@ public class ImageShifter {
 	private Environment env;
 	
 	private ThreadPoolExecutor threadPool;
+	
+	public static ConfigurableApplicationContext ctx;
 	
 	private static Logger logger = Logger.getLogger(ImageShifter.class);
 	
@@ -42,7 +46,7 @@ public class ImageShifter {
 		threadPool = new ThreadPoolExecutor(threadNum, threadNum, 1, TimeUnit.HOURS, new LinkedBlockingQueue<Runnable>());
 	}
 	
-	private void startImageThreads(ApplicationContext ctx) {
+	public void startImageThreads(ApplicationContext ctx) {
 		while(imageShiftService.imageCounts() > 0) {
 			int diff = Integer.parseInt(env.getRequiredProperty(THREAD_NUM)) - threadPool.getActiveCount();
 			for(int i = 0; i < diff; i++) {
@@ -52,15 +56,19 @@ public class ImageShifter {
 				logger.info("Totally " + threadPool.getPoolSize() + " threads");
 			}
 		}
+		logger.info("No image needs to be shifted.");
 		threadPool.shutdown();
 	}
 	
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(ImageShifter.class);
-    	app.setShowBanner(false);
-    	ConfigurableApplicationContext ctx = app.run(args);
-    	ImageShifter shifter = (ImageShifter)ctx.getBean(ImageShifter.class);
-    	shifter.startImageThreads(ctx);
+	    	app.setShowBanner(false);
+	    	ctx = app.run(args);
+//	    	ImageShifter shifter = (ImageShifter)ctx.getBean(ImageShifter.class);
+//	    	shifter.startImageThreads(ctx);
+	    	while(true) {
+	    		
+	    	}
 	}
 
 }

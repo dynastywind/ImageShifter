@@ -31430,3 +31430,23 @@
 2015-04-17 07:48:22.085  INFO 17044 --- [pool-1-thread-9] cisc.awas.image_shifter.ShifterThread    : Thread 587013 finished
 2015-04-20 10:06:51.240  INFO 6908 --- [main] cisc.awas.image_shifter.ImageShifter     : Starting ImageShifter on yli with PID 6908 (C:\Users\yli\git\ImageShifter\ImageShifter\bin started by yli in C:\Users\yli\git\ImageShifter\ImageShifter)
 2015-04-20 10:06:53.209  INFO 6908 --- [main] cisc.awas.image_shifter.ImageShifter     : Started ImageShifter in 2.125 seconds (JVM running for 2.37)
+2015-04-20 10:44:22.524  INFO 4748 --- [main] cisc.awas.image_shifter.ImageShifter     : Starting ImageShifter on yli with PID 4748 (C:\Users\yli\git\ImageShifter\ImageShifter\bin started by yli in C:\Users\yli\git\ImageShifter\ImageShifter)
+2015-04-20 10:44:24.462  INFO 4748 --- [main] cisc.awas.image_shifter.ImageShifter     : Started ImageShifter in 2.11 seconds (JVM running for 2.349)
+2015-04-20 10:45:39.326  INFO 3100 --- [main] cisc.awas.image_shifter.ImageShifter     : Starting ImageShifter on yli with PID 3100 (C:\Users\yli\git\ImageShifter\ImageShifter\bin started by yli in C:\Users\yli\git\ImageShifter\ImageShifter)
+2015-04-20 10:45:41.248  INFO 3100 --- [main] cisc.awas.image_shifter.ImageShifter     : Started ImageShifter in 2.11 seconds (JVM running for 2.35)
+2015-04-20 10:46:30.972  INFO 5904 --- [main] cisc.awas.image_shifter.ImageShifter     : Starting ImageShifter on yli with PID 5904 (C:\Users\yli\git\ImageShifter\ImageShifter\bin started by yli in C:\Users\yli\git\ImageShifter\ImageShifter)
+2015-04-20 10:46:32.818  INFO 5904 --- [main] cisc.awas.image_shifter.ImageShifter     : Started ImageShifter in 2.018 seconds (JVM running for 2.25)
+2015-04-20 10:51:04.086  INFO 4444 --- [main] cisc.awas.image_shifter.ImageShifter     : Starting ImageShifter on yli with PID 4444 (C:\Users\yli\git\ImageShifter\ImageShifter\bin started by yli in C:\Users\yli\git\ImageShifter\ImageShifter)
+2015-04-20 10:51:06.352  INFO 4444 --- [main] cisc.awas.image_shifter.ImageShifter     : Started ImageShifter in 2.438 seconds (JVM running for 2.675)
+2015-04-20 10:51:16.147  INFO 1060 --- [main] cisc.awas.image_shifter.ImageShifter     : Starting ImageShifter on yli with PID 1060 (C:\Users\yli\git\ImageShifter\ImageShifter\bin started by yli in C:\Users\yli\git\ImageShifter\ImageShifter)
+2015-04-20 10:51:18.318  INFO 1060 --- [main] cisc.awas.image_shifter.ImageShifter     : Started ImageShifter in 2.328 seconds (JVM running for 2.559)
+2015-04-20 10:52:00.025  INFO 1060 --- [imageShifterScheduler-1] c.a.i.schedule.ImageShifterSchedule      : Starts to shift images...
+2015-04-20 10:52:00.116  INFO 1060 --- [imageShifterScheduler-1] c.a.i.schedule.ImageShifterSchedule      : Image shifting ends.
+2015-04-20 10:55:03.718  INFO 5096 --- [main] cisc.awas.image_shifter.ImageShifter     : Starting ImageShifter on yli with PID 5096 (C:\Users\yli\git\ImageShifter\ImageShifter\bin started by yli in C:\Users\yli\git\ImageShifter\ImageShifter)
+2015-04-20 10:55:11.060  INFO 5292 --- [main] cisc.awas.image_shifter.ImageShifter     : Starting ImageShifter on yli with PID 5292 (C:\Users\yli\git\ImageShifter\ImageShifter\bin started by yli in C:\Users\yli\git\ImageShifter\ImageShifter)
+2015-04-20 10:55:13.231  INFO 5292 --- [main] cisc.awas.image_shifter.ImageShifter     : Started ImageShifter in 2.343 seconds (JVM running for 2.582)
+2015-04-20 10:55:18.469  INFO 4164 --- [main] cisc.awas.image_shifter.ImageShifter     : Starting ImageShifter on yli with PID 4164 (C:\Users\yli\git\ImageShifter\ImageShifter\bin started by yli in C:\Users\yli\git\ImageShifter\ImageShifter)
+2015-04-20 10:55:20.750  INFO 4164 --- [main] cisc.awas.image_shifter.ImageShifter     : Started ImageShifter in 2.422 seconds (JVM running for 2.678)
+2015-04-20 10:56:00.018  INFO 4164 --- [imageShifterScheduler-1] c.a.i.schedule.ImageShifterSchedule      : Starts to shift images...
+2015-04-20 10:56:00.129  INFO 4164 --- [imageShifterScheduler-1] cisc.awas.image_shifter.ImageShifter     : No image needs to be shifted.
+2015-04-20 10:56:00.129  INFO 4164 --- [imageShifterScheduler-1] c.a.i.schedule.ImageShifterSchedule      : Image shifting ends.

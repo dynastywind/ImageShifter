@@ -67,11 +67,10 @@ public class ImageShifter {
 		SpringApplication app = new SpringApplication(ImageShifter.class);
 	    	app.setShowBanner(false);
 	    	ctx = app.run(args);
-	    	ImageShifter shifter = (ImageShifter)ctx.getBean(ImageShifter.class);
-	    	shifter.startImageThreads(ctx);
-//	    	while(true) {
-//	    		
-//	    	}
+//	    	ImageShifter shifter = (ImageShifter)ctx.getBean(ImageShifter.class);
+//	    	shifter.startImageThreads(ctx);
+	    	while(true) {
+	    	}
 	}
 
 }

@@ -1,19 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:task="http://www.springframework.org/schema/task"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
-                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
-                            http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
 	<context:component-scan base-package="cisc.awas.image_shifter" />
 	
 	<!-- Here Begins the Quartz Configuration -->
-	<task:scheduler id="imageShifterScheduler" />
+	<bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="imageShifterSchedule" />
+		<property name="targetMethod" value="shift" />
+		<property name="concurrent" value="false" />
+	</bean>
 	
-	<task:scheduled-tasks scheduler="imageShifterScheduler">
-		<task:scheduled ref="imageShifterSchedule" method="shift" cron="0 0 */1 * * *" />
-	</task:scheduled-tasks>
+	<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail" />
+		<property name="cronExpression" value="0 0 6 * * ?" />
+	</bean>
+	
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="cronTrigger" />
+			</list>
+		</property>
+	</bean>
 	<!-- Here Ends the Quartz Configuration -->
 	
 </beans>

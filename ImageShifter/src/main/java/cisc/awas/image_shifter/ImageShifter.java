@@ -39,6 +39,8 @@ public class ImageShifter {
 	private static Logger logger = Logger.getLogger(ImageShifter.class);
 	
 	private static final String THREAD_NUM = "thread.num";
+
+	private static final String RUNNING_PERIOD = "running.period";
 	
 	@PostConstruct
 	private void initImageShifter() {
@@ -47,7 +49,8 @@ public class ImageShifter {
 	}
 	
 	public void startImageThreads(ApplicationContext ctx) {
-		while(imageShiftService.imageCounts() > 0) {
+		long startTime = System.currentTimeMillis();
+		while(imageShiftService.imageCounts() > 0 && System.currentTimeMillis() - startTime <= Integer.parseInt(env.getRequiredProperty(RUNNING_PERIOD)) * 3600000L) {
 			int diff = Integer.parseInt(env.getRequiredProperty(THREAD_NUM)) - threadPool.getActiveCount();
 			for(int i = 0; i < diff; i++) {
 				ShifterThread shifterThread = ctx.getBean(ShifterThread.class);
@@ -64,11 +67,11 @@ public class ImageShifter {
 		SpringApplication app = new SpringApplication(ImageShifter.class);
 	    	app.setShowBanner(false);
 	    	ctx = app.run(args);
-//	    	ImageShifter shifter = (ImageShifter)ctx.getBean(ImageShifter.class);
-//	    	shifter.startImageThreads(ctx);
-	    	while(true) {
-	    		
-	    	}
+	    	ImageShifter shifter = (ImageShifter)ctx.getBean(ImageShifter.class);
+	    	shifter.startImageThreads(ctx);
+//	    	while(true) {
+//	    		
+//	    	}
 	}
 
 }

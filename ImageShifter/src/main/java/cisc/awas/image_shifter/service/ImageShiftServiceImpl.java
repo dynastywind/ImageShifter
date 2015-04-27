@@ -49,6 +49,10 @@ public class ImageShiftServiceImpl implements ImageShiftService {
 			image  = imageRepository.findFirstByIdGreaterThan(currentImageId);
 			currentImageId = image.getId();
 		}
+		if(null != imageNewRepository.findFirstByPostIdAndHashValue(image.getPostId(), image.getHashValue())) {
+			imageRepository.delete(image);
+			return;
+		}
 		try {
 			Blob blob = image.getImageContent();
 			byte[] bytes = blob.getBytes(1, (int)blob.length());

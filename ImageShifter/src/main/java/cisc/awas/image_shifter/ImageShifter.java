@@ -15,7 +15,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.env.Environment;
 
 import cisc.awas.image_shifter.service.ImageShiftService;
@@ -23,7 +23,6 @@ import cisc.awas.image_shifter.service.ImageShiftService;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan(basePackages = "cisc.awas.image_shifter")
-@ImportResource(value = {"classpath:applicationContext.xml"})
 public class ImageShifter {
 	
 	@Autowired
@@ -34,6 +33,8 @@ public class ImageShifter {
 	
 	private ThreadPoolExecutor threadPool;
 	
+	private String workMode;
+	
 	public static ConfigurableApplicationContext ctx;
 	
 	private static Logger logger = Logger.getLogger(ImageShifter.class);
@@ -41,16 +42,20 @@ public class ImageShifter {
 	private static final String THREAD_NUM = "thread.num";
 
 	private static final String RUNNING_PERIOD = "running.period";
+
+	private static final String WORK_MODE = "work.mode";
 	
 	@PostConstruct
 	private void initImageShifter() {
 		int threadNum = Integer.parseInt(env.getRequiredProperty(THREAD_NUM));
-		threadPool = new ThreadPoolExecutor(threadNum, threadNum, 1, TimeUnit.HOURS, new LinkedBlockingQueue<Runnable>());
+		this.threadPool = new ThreadPoolExecutor(threadNum, threadNum, 1, TimeUnit.HOURS, new LinkedBlockingQueue<Runnable>());
+		this.workMode = env.getRequiredProperty(WORK_MODE);
 	}
 	
 	public void startImageThreads(ApplicationContext ctx) {
+		logger.info("Work Mode " + workMode + " is ON");
 		long startTime = System.currentTimeMillis();
-		while(imageShiftService.imageCounts() > 0 && System.currentTimeMillis() - startTime <= Integer.parseInt(env.getRequiredProperty(RUNNING_PERIOD)) * 3600000L) {
+		while(imageShiftService.imageCounts() > 0 && withinAllowedTime(startTime)) {
 			int diff = Integer.parseInt(env.getRequiredProperty(THREAD_NUM)) - threadPool.getActiveCount();
 			for(int i = 0; i < diff; i++) {
 				ShifterThread shifterThread = ctx.getBean(ShifterThread.class);
@@ -63,13 +68,26 @@ public class ImageShifter {
 		threadPool.shutdown();
 	}
 	
+	public boolean isScheduled() {
+		return workMode.equals(WorkMode.SCHEDULED.name());
+	}
+	
+	private boolean withinAllowedTime(long startTime) {
+		if(workMode.equals(WorkMode.SCHEDULED.name())) {
+			return System.currentTimeMillis() - startTime <= Integer.parseInt(env.getRequiredProperty(RUNNING_PERIOD)) * 3600000L;
+		}
+		return true;
+	}
+	
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(ImageShifter.class);
 	    	app.setShowBanner(false);
 	    	ctx = app.run(args);
-//	    	ImageShifter shifter = (ImageShifter)ctx.getBean(ImageShifter.class);
-//	    	shifter.startImageThreads(ctx);
-	    	while(true) {
+	    	ImageShifter shifter = (ImageShifter)ctx.getBean(ImageShifter.class);
+	    	if(shifter.isScheduled()) {
+	    		new ClassPathXmlApplicationContext(new String[]{"classpath:applicationContext.xml"}, ctx);
+	    	} else {	    		
+	    		shifter.startImageThreads(ctx);
 	    	}
 	}
 

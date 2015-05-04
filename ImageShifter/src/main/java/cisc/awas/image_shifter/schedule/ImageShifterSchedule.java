@@ -18,8 +18,7 @@ public class ImageShifterSchedule {
 	
 	public void shift() {
 		logger.info("Starts to shift images...");
-		System.out.println("Hello");
-//		imageShifter.startImageThreads(ImageShifter.ctx);
+		imageShifter.startImageThreads(ImageShifter.ctx);
 		logger.info("Image shifting ends.");
 	}
 	

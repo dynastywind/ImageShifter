@@ -10,8 +10,10 @@ import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import cisc.awas.image_shifter.entity.Image;
@@ -40,6 +42,8 @@ public class ImageShiftServiceImpl implements ImageShiftService {
 	
 	private static Long currentImageId = 0L;
 	
+	private static Logger logger = Logger.getLogger(ImageShiftServiceImpl.class);
+	
 	private static final String DEST_FILE_PREFIX = "dest.file.prefix";
 	
 	@Override
@@ -49,21 +53,26 @@ public class ImageShiftServiceImpl implements ImageShiftService {
 			image  = imageRepository.findFirstByIdGreaterThan(currentImageId);
 			currentImageId = image.getId();
 		}
-		if(null != imageNewRepository.findFirstByPostIdAndHashValue(image.getPostId(), image.getHashValue())) {
-			imageRepository.delete(image);
-			return;
-		}
 		try {
 			Blob blob = image.getImageContent();
 			byte[] bytes = blob.getBytes(1, (int)blob.length());
 			String fileName = generateFileName(image);
 			if(null == fileName) {
+				logger.info("No Valid Topic.");
+				imageRepository.delete(image);
+				return;
+			}
+			if(null != imageNewRepository.findFirstByPostIdAndHashValue(image.getPostId(), image.getHashValue())) {
+				logger.info("Content Duplicated");
 				imageRepository.delete(image);
 				return;
 			}
 			FileUtils.writeByteArrayToFile(new File(fileName), bytes);
 			ImageNew imageNew = ImageTransformer.transform(image, fileName);
 			imageNewRepository.saveAndFlush(imageNew);
+			imageRepository.delete(image);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
 			imageRepository.delete(image);
 		} catch (SQLException e) {
 			e.printStackTrace();

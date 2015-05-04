@@ -53,7 +53,6 @@ public class ImageShifter {
 	}
 	
 	public void startImageThreads(ApplicationContext ctx) {
-		logger.info("Work Mode " + workMode + " is ON");
 		long startTime = System.currentTimeMillis();
 		while(imageShiftService.imageCounts() > 0 && withinAllowedTime(startTime)) {
 			int diff = Integer.parseInt(env.getRequiredProperty(THREAD_NUM)) - threadPool.getActiveCount();
@@ -69,6 +68,7 @@ public class ImageShifter {
 	}
 	
 	public boolean isScheduled() {
+		logger.info("Work Mode " + workMode + " is ON");
 		return workMode.equals(WorkMode.SCHEDULED.name());
 	}
 	

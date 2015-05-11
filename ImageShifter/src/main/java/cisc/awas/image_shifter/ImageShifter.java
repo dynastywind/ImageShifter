@@ -53,6 +53,10 @@ public class ImageShifter {
 	}
 	
 	public void startImageThreads(ApplicationContext ctx) {
+		if(this.threadPool.isShutdown()) {
+			int threadNum = Integer.parseInt(env.getRequiredProperty(THREAD_NUM));
+			this.threadPool = new ThreadPoolExecutor(threadNum, threadNum, 1, TimeUnit.HOURS, new LinkedBlockingQueue<Runnable>());
+		}
 		long startTime = System.currentTimeMillis();
 		while(imageShiftService.imageCounts() > 0 && withinAllowedTime(startTime)) {
 			int diff = Integer.parseInt(env.getRequiredProperty(THREAD_NUM)) - threadPool.getActiveCount();
@@ -64,7 +68,7 @@ public class ImageShifter {
 			}
 		}
 		logger.info("No image needs to be shifted.");
-		threadPool.shutdown();
+		this.threadPool.shutdown();
 	}
 	
 	public boolean isScheduled() {

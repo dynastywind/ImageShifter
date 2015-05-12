@@ -88,6 +88,11 @@ public class ImageShiftServiceImpl implements ImageShiftService {
 		return imageRepository.count();
 	}
 	
+	@Override
+	public  void resetCurrentImageId() {
+		currentImageId = 0L;
+	}
+	
 	private String generateFileName(Image image) {
 		Topic topic = topicRepository.findOne(image.getTopicId());
 		Calendar createDate = Calendar.getInstance();

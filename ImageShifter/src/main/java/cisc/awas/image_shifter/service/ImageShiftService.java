@@ -6,4 +6,6 @@ public interface ImageShiftService {
 	
 	public long imageCounts();
 	
+	public void resetCurrentImageId();
+	
 }

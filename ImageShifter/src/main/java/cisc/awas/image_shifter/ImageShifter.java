@@ -53,12 +53,12 @@ public class ImageShifter {
 	}
 	
 	public void startImageThreads(ApplicationContext ctx) {
-		if(this.threadPool.isShutdown()) {
+		if(this.threadPool.isTerminated()) {
 			int threadNum = Integer.parseInt(env.getRequiredProperty(THREAD_NUM));
 			this.threadPool = new ThreadPoolExecutor(threadNum, threadNum, 1, TimeUnit.HOURS, new LinkedBlockingQueue<Runnable>());
 		}
 		long startTime = System.currentTimeMillis();
-		while(imageShiftService.imageCounts() > 0 && withinAllowedTime(startTime)) {
+		while(imageShiftService.imageCounts() > threadPool.getActiveCount() && withinAllowedTime(startTime)) {
 			int diff = Integer.parseInt(env.getRequiredProperty(THREAD_NUM)) - threadPool.getActiveCount();
 			for(int i = 0; i < diff; i++) {
 				ShifterThread shifterThread = ctx.getBean(ShifterThread.class);
@@ -67,8 +67,11 @@ public class ImageShifter {
 				logger.info("Totally " + threadPool.getPoolSize() + " threads");
 			}
 		}
-		logger.info("Image Shifting Task End.");
+		imageShiftService.resetCurrentImageId();
 		this.threadPool.shutdown();
+		while(!this.threadPool.isTerminated()) {
+		}
+		logger.info("Image Shifting Task Ends.");
 	}
 	
 	public boolean isScheduled() {

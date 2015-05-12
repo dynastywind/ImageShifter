@@ -67,7 +67,7 @@ public class ImageShifter {
 				logger.info("Totally " + threadPool.getPoolSize() + " threads");
 			}
 		}
-		logger.info("No image needs to be shifted.");
+		logger.info("Image Shifting Task End.");
 		this.threadPool.shutdown();
 	}
 	

@@ -35,6 +35,8 @@ public class ImageShifter {
 	
 	private String workMode;
 	
+	private int threadNum;
+	
 	public static ConfigurableApplicationContext ctx;
 	
 	private static Logger logger = Logger.getLogger(ImageShifter.class);
@@ -47,19 +49,21 @@ public class ImageShifter {
 	
 	@PostConstruct
 	private void initImageShifter() {
-		int threadNum = Integer.parseInt(env.getRequiredProperty(THREAD_NUM));
+		this.threadNum = Integer.parseInt(env.getRequiredProperty(THREAD_NUM));
 		this.threadPool = new ThreadPoolExecutor(threadNum, threadNum, 1, TimeUnit.HOURS, new LinkedBlockingQueue<Runnable>());
 		this.workMode = env.getRequiredProperty(WORK_MODE);
 	}
 	
 	public void startImageThreads(ApplicationContext ctx) {
 		if(this.threadPool.isTerminated()) {
-			int threadNum = Integer.parseInt(env.getRequiredProperty(THREAD_NUM));
 			this.threadPool = new ThreadPoolExecutor(threadNum, threadNum, 1, TimeUnit.HOURS, new LinkedBlockingQueue<Runnable>());
 		}
 		long startTime = System.currentTimeMillis();
 		while(imageShiftService.imageCounts() > threadPool.getActiveCount() && withinAllowedTime(startTime)) {
-			int diff = Integer.parseInt(env.getRequiredProperty(THREAD_NUM)) - threadPool.getActiveCount();
+			if(threadPool.getActiveCount() > threadNum) {
+				continue;
+			}
+			int diff = threadNum - threadPool.getActiveCount();
 			for(int i = 0; i < diff; i++) {
 				ShifterThread shifterThread = ctx.getBean(ShifterThread.class);
 				threadPool.submit(shifterThread);

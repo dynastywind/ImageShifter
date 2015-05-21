@@ -7,7 +7,6 @@ public class ImageTransformer {
 
 	public static ImageNew transform(Image image, String fileName) {
 		ImageNew imageNew = new ImageNew();
-		imageNew.setId(image.getId());
 		imageNew.setTopicId(image.getTopicId());
 		imageNew.setPostId(image.getPostId());
 		imageNew.setImageContent(null);

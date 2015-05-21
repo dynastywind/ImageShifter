@@ -4,19 +4,14 @@ import java.sql.Blob;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "image2")
 public class ImageNew {
 
 	@Id
-	@GeneratedValue(generator = "page_id")
-	@GenericGenerator(name = "page_id", strategy = "assigned")
 	@Column(name = "idimage")
 	private long id;
 	

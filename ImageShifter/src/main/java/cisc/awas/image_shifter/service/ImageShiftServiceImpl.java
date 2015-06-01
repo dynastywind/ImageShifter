@@ -90,7 +90,7 @@ public class ImageShiftServiceImpl implements ImageShiftService {
 	
 	@Override
 	public long imageCounts() {
-		ImageRows imageRows = imageRowsRepository.findFirstByRows();
+		ImageRows imageRows = imageRowsRepository.findFirstByOrderByRowsAsc();
 		if(null == imageRows) {			
 			return 0;
 		}

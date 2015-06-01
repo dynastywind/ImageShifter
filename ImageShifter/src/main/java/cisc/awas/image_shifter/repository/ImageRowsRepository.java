@@ -6,6 +6,6 @@ import cisc.awas.image_shifter.entity.ImageRows;
 
 public interface ImageRowsRepository extends JpaRepository<ImageRows, Long> {
 
-	public ImageRows  findFirstByRows();
+	public ImageRows  findFirstByOrderByRowsAsc();
 	
 }

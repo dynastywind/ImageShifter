@@ -20,6 +20,11 @@ import org.springframework.core.env.Environment;
 
 import cisc.awas.image_shifter.service.ImageShiftService;
 
+/**
+ * Image Shifter.
+ * @author Lyndon
+ * @version 1.0
+ */
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan(basePackages = "cisc.awas.image_shifter")
@@ -54,6 +59,10 @@ public class ImageShifter {
 		this.workMode = env.getRequiredProperty(WORK_MODE);
 	}
 	
+	/**
+	 * Start image shifter threads.
+	 * @param ctx The given Spring context
+	 */
 	public void startImageThreads(ApplicationContext ctx) {
 		if(this.threadPool.isTerminated()) {
 			this.threadPool = new ThreadPoolExecutor(threadNum, threadNum, 1, TimeUnit.HOURS, new LinkedBlockingQueue<Runnable>());
@@ -78,11 +87,13 @@ public class ImageShifter {
 		logger.info("Image Shifting Task Ends.");
 	}
 	
+	//Check the work mode
 	public boolean isScheduled() {
 		logger.info("Work Mode " + workMode + " is ON");
 		return workMode.equals(WorkMode.SCHEDULED.name());
 	}
 	
+	//Check whether the task is within the predefined executing period
 	private boolean withinAllowedTime(long startTime) {
 		if(workMode.equals(WorkMode.SCHEDULED.name())) {
 			return System.currentTimeMillis() - startTime <= Integer.parseInt(env.getRequiredProperty(RUNNING_PERIOD)) * 3600000L;

@@ -18,9 +18,11 @@ import org.springframework.stereotype.Service;
 
 import cisc.awas.image_shifter.entity.Image;
 import cisc.awas.image_shifter.entity.ImageNew;
+import cisc.awas.image_shifter.entity.ImageRows;
 import cisc.awas.image_shifter.entity.Topic;
 import cisc.awas.image_shifter.repository.ImageNewRepository;
 import cisc.awas.image_shifter.repository.ImageRepository;
+import cisc.awas.image_shifter.repository.ImageRowsRepository;
 import cisc.awas.image_shifter.repository.TopicRepository;
 import cisc.awas.image_shifter.util.ImageTransformer;
 
@@ -33,6 +35,9 @@ public class ImageShiftServiceImpl implements ImageShiftService {
 	
 	@Autowired
 	private ImageNewRepository imageNewRepository;
+	
+	@Autowired
+	private ImageRowsRepository imageRowsRepository;
 	
 	@Autowired
 	private TopicRepository topicRepository;
@@ -85,7 +90,11 @@ public class ImageShiftServiceImpl implements ImageShiftService {
 	
 	@Override
 	public long imageCounts() {
-		return imageRepository.count();
+		ImageRows imageRows = imageRowsRepository.findFirstByRows();
+		if(null == imageRows) {			
+			return 0;
+		}
+		return imageRows.getRows();
 	}
 	
 	@Override

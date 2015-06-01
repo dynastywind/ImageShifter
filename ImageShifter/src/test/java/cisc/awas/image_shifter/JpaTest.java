@@ -31,7 +31,7 @@ public class JpaTest {
 	private ImageShiftService imageShiftService;
 	
 	@Test
-//	@Ignore
+	@Ignore
 	public void jpaTest() {
 		imageShiftService.shiftImage();
 	}
@@ -50,6 +50,20 @@ public class JpaTest {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	@Ignore
+	public void imageCountTest() {
+		imageShiftService.imageCounts();
+	}
+	
+	@Test
+//	@Ignore
+	public void triggerTest() {
+		long originalCount = imageShiftService.imageCounts();
+		imageRepository.delete(44149L);
+		assertEquals(imageShiftService.imageCounts(), originalCount - 1);
 	}
 	
 }
